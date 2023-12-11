@@ -13,6 +13,7 @@ The labels in the mask are as follows:
  - 3: Shark
  - 4: Coral
 
+The generated images are randomly blurred with gaussian blurring using a radius of 1 or 2.
 
 ## Installation
 

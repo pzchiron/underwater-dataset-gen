@@ -1,10 +1,13 @@
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFilter
 import random
 
 from modules.draw import draw_ground, draw_fish, draw_shark, draw_coral
 
 
 def generate_underwater_scene(width, height, num_fish=15, num_sharks=8, num_corals=10):
+    """
+    Creates an underwater scene with mask
+    """
     # Create a blank image
     img = Image.new("RGB", (width, height), "lightblue")
     mask = Image.new("L", (width, height), 0)
@@ -49,7 +52,6 @@ def generate_underwater_scene(width, height, num_fish=15, num_sharks=8, num_cora
             coral_color = (random.randint(150, 255), random.randint(50, 150), random.randint(50, 100))
             coral_position = (random.randint(0, width), random.randint(int((1-fraction)*height), height))
             coral_levels = random.randint(2,4)
-
             # Draw coral shape (a simple branching structure)
             draw_coral(draw, mask_draw, coral_size, coral_position, coral_levels, coral_color, mask_label=150)
             coral_counter += 1
@@ -59,10 +61,20 @@ def generate_underwater_scene(width, height, num_fish=15, num_sharks=8, num_cora
 
     return img, mask
 
+
+def rand_gauss_blur(img: Image) -> Image:
+    """
+    Blurs an image using gaussian blurring with a random radius.
+    """
+    radius = random.randint(0,2)
+    return img.filter(ImageFilter.GaussianBlur(radius))
+
+
 if __name__ == "__main__":
 
     width, height = 256, 256
     underwater_image, underwater_mask = generate_underwater_scene(width, height)
+    underwater_image = rand_gauss_blur(underwater_image)
     underwater_image.show()
     underwater_mask.show()
     #underwater_image.save("underwater_scene.png")
