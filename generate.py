@@ -1,5 +1,7 @@
 from PIL import Image, ImageDraw, ImageFilter
 import random
+from pathlib import Path
+import os
 
 from modules.draw import draw_ground, draw_fish, draw_shark, draw_coral
 
@@ -19,7 +21,7 @@ def generate_underwater_scene(width, height, num_fish=15, num_sharks=8, num_cora
     # draw floor
     floor_color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
     fraction = random.uniform(0.1,1)*0.5
-    draw_ground(draw, mask_draw, img.size, fraction, floor_color, mask_label=100)
+    draw_ground(draw, mask_draw, img.size, fraction, floor_color, mask_label=1)
 
     # random order generation
     choices = ["fish", "shark", "coral"]
@@ -32,7 +34,7 @@ def generate_underwater_scene(width, height, num_fish=15, num_sharks=8, num_cora
             fish_position = (random.randint(0, width), random.randint(0, height))
             fish_color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
             # Draw fish with fins
-            draw_fish(draw, mask_draw, fish_position, fish_size, fish_color, mask_label=200)
+            draw_fish(draw, mask_draw, fish_position, fish_size, fish_color, mask_label=2)
             fish_counter += 1
             if fish_counter >= num_fish:
                 choices.remove("fish")
@@ -42,7 +44,7 @@ def generate_underwater_scene(width, height, num_fish=15, num_sharks=8, num_cora
             shark_position = (random.randint(0, width), random.randint(0, height))
             shark_color = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
             # Draw fish with fins
-            draw_shark(draw, mask_draw, shark_position, shark_size, shark_color, mask_label=255)
+            draw_shark(draw, mask_draw, shark_position, shark_size, shark_color, mask_label=3)
             shark_counter += 1
             if shark_counter >= num_sharks:
                 choices.remove("shark")
@@ -53,7 +55,7 @@ def generate_underwater_scene(width, height, num_fish=15, num_sharks=8, num_cora
             coral_position = (random.randint(0, width), random.randint(int((1-fraction)*height), height))
             coral_levels = random.randint(2,4)
             # Draw coral shape (a simple branching structure)
-            draw_coral(draw, mask_draw, coral_size, coral_position, coral_levels, coral_color, mask_label=150)
+            draw_coral(draw, mask_draw, coral_size, coral_position, coral_levels, coral_color, mask_label=4)
             coral_counter += 1
             if coral_counter >= num_corals:
                 choices.remove("coral")
@@ -72,9 +74,20 @@ def rand_gauss_blur(img: Image) -> Image:
 
 if __name__ == "__main__":
 
+    # setup
     width, height = 256, 256
-    underwater_image, underwater_mask = generate_underwater_scene(width, height)
-    underwater_image = rand_gauss_blur(underwater_image)
-    underwater_image.show()
-    underwater_mask.show()
-    #underwater_image.save("underwater_scene.png")
+    n_samples = 500
+    output_path = Path("/home/peterzhang/Documents/underwater-dataset/")
+
+    for i in range(n_samples):
+        folder_name = str(i).zfill(3)
+        folder_path = output_path / folder_name
+        os.makedirs(folder_path, exist_ok=True)
+        
+        # generate images
+        underwater_image, underwater_mask = generate_underwater_scene(width, height)
+        underwater_image = rand_gauss_blur(underwater_image)
+
+        # save images
+        underwater_image.save(folder_path / "image.png")
+        underwater_mask.save(folder_path / "mask.png")
