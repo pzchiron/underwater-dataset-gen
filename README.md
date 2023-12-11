@@ -6,6 +6,13 @@ Sample image of a generated scene.            |  And the corresponding mask.
 :-------------------------:|:-------------------------:
 ![image](examples/underwater_example.png)  |  ![mask](examples/mask_example.png)
 
+The labels in the mask are as follows:
+ - 0: Background
+ - 1: Ground
+ - 2: Fish
+ - 3: Shark
+ - 4: Coral
+
 
 ## Installation
 
