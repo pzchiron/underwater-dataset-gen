@@ -103,5 +103,5 @@ if __name__ == "__main__":
         underwater_image = rand_gauss_blur(underwater_image)
 
         # save images
-        underwater_image.save(folder_path / "image.png")
-        underwater_mask.save(folder_path / "mask.png")
+        underwater_image.save(folder_path / f"{folder_name}_image.png")
+        underwater_mask.save(folder_path / f"{folder_name}_mask.png")

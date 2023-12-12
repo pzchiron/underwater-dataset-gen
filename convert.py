@@ -35,7 +35,7 @@ if __name__ == "__main__":
                     np_img = np.transpose(np_img, (2,0,1))
 
                     nifti_img = nib.Nifti1Image(np_img, np.eye(4))
-                    nib.save(nifti_img, out_path / sample.name / "image.nii.gz")
+                    nib.save(nifti_img, out_path / sample.name / f"{sample.name}_image.nii.gz")
 
                 # convert mask file
                 elif "mask.png" in file.name.lower():
@@ -45,4 +45,4 @@ if __name__ == "__main__":
                     np_mask = np.expand_dims(np_mask, axis=0)
                     
                     nifti_mask = nib.Nifti1Image(np_mask, np.eye(4))
-                    nib.save(nifti_mask, out_path / sample.name / "mask.nii.gz")
+                    nib.save(nifti_mask, out_path / sample.name / f"{sample.name}_mask.nii.gz")
