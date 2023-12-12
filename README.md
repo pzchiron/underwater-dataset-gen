@@ -15,7 +15,18 @@ The labels in the mask are as follows:
 
 The generated images are randomly blurred with gaussian blurring using a radius of 1 or 2.
 
-## Installation
-
+## Dependencies
+This repo only depends on Pillow, numpy and nibabel. Install them with:
+```
+pip install numpy nibabel Pillow
+```
 
 ## Usage
+Example use case, to generate 1000 data samples of size (512, 512), simply run:
+```
+python generate.py -n 1000 --size 512 512 -d /path/where/to/generate
+```
+Then if you wish, you can convert it to .nii.gz (only makes sense for the originally intended example) using:
+```
+python convert.py -d /path/where/the/files/are -o /where/to/save/the/niftis
+```

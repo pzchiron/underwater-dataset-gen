@@ -2,6 +2,7 @@ from PIL import Image, ImageDraw, ImageFilter
 import random
 from pathlib import Path
 import os
+import argparse
 
 from modules.draw import draw_ground, draw_fish, draw_shark, draw_coral
 
@@ -72,12 +73,25 @@ def rand_gauss_blur(img: Image) -> Image:
     return img.filter(ImageFilter.GaussianBlur(radius))
 
 
+def get_args():
+    """
+    Get arguments
+    """
+    parser = argparse.ArgumentParser()
+    parser.add_argument("-n", "--n_samples", type=int, default=500, help="How many samples to generate.")
+    parser.add_argument("-d", "--data_path", default='data/', help="Path to the folder where to generate the files.")
+    parser.add_argument("--size", nargs='+', type=int, default=[256, 256], help="(Width, Height) of the images." )
+    return parser.parse_args()
+
+
 if __name__ == "__main__":
 
     # setup
-    width, height = 256, 256
-    n_samples = 500
-    output_path = Path("/home/peterzhang/Documents/underwater-dataset/")
+    args = get_args()
+    assert len(args.size) == 2, "Make sure the --size argument is width height. For example: --size 256 256"
+    width, height = args.size[0], args.size[1]
+    n_samples = args.n_samples
+    output_path = Path(args.data_path)
 
     for i in range(n_samples):
         folder_name = str(i).zfill(3)
