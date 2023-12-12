@@ -32,6 +32,7 @@ if __name__ == "__main__":
                     pil_img = Image.open(file)
                     np_img = np.asarray(pil_img)
                     np_img = np.rot90(np_img, k=1, axes=(1,0))
+                    np_img = np.transpose(np_img, (2,0,1))
 
                     nifti_img = nib.Nifti1Image(np_img, np.eye(4))
                     nib.save(nifti_img, out_path / sample.name / "image.nii.gz")
@@ -41,6 +42,7 @@ if __name__ == "__main__":
                     pil_mask = Image.open(file)
                     np_mask = np.asarray(pil_mask)
                     np_mask = np.rot90(np_mask, k=1, axes=(1,0))
+                    np_mask = np.expand_dims(np_mask, axis=0)
                     
                     nifti_mask = nib.Nifti1Image(np_mask, np.eye(4))
                     nib.save(nifti_mask, out_path / sample.name / "mask.nii.gz")
